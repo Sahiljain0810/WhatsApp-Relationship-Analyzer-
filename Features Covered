@@ -1,0 +1,7 @@
+✅ NLP-based WhatsApp chat analysis
+✅ RoBERTa + CardiffNLP sentiment
+✅ Emoji-based sentiment cues
+✅ Dialogue grouping logic
+✅ 20-dialogue rule for trends
+✅ Interactive Streamlit UI
+✅ Performance-friendly regex cleaning
