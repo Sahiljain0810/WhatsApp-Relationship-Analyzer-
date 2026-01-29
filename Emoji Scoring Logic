@@ -1,0 +1,12 @@
+import emoji
+
+EMOJI_SCORES = {
+    "😊": 1, "😂": 2, "❤️": 3, "😢": -2, "😡": -3
+}
+
+def emoji_score(text):
+    score = 0
+    for char in text:
+        if char in EMOJI_SCORES:
+            score += EMOJI_SCORES[char]
+    return score
