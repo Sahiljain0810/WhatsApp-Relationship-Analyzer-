@@ -1,0 +1,46 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from chat_parser import parse_chat
+from sentiment import analyze_sentiment
+from emoji_utils import emoji_score
+
+st.set_page_config(page_title="WhatsApp Relationship Analyzer", layout="wide")
+
+st.title("💬 WhatsApp Relationship Analyzer")
+
+uploaded_file = st.file_uploader("Upload WhatsApp Chat (.txt)", type="txt")
+
+if uploaded_file:
+    chat_text = uploaded_file.read().decode("utf-8")
+    df = parse_chat(chat_text)
+
+    st.subheader("📄 Raw Chat Data")
+    st.dataframe(df.head())
+
+    # Sentiment Analysis
+    sentiments = []
+    scores = []
+
+    for msg in df["Message"]:
+        label, score = analyze_sentiment(msg)
+        sentiments.append(label)
+        scores.append(score + emoji_score(msg))
+
+    df["Sentiment"] = sentiments
+    df["Score"] = scores
+
+    # 20-Dialogue Rule
+    df["Month"] = df["Date"].dt.to_period("M")
+    monthly = df.groupby("Month").filter(lambda x: len(x) >= 20)
+
+    st.subheader("📊 Sentiment Distribution")
+    fig, ax = plt.subplots()
+    sns.countplot(x="Sentiment", data=monthly, ax=ax)
+    st.pyplot(fig)
+
+    st.subheader("📈 Emotional Trend Over Time")
+    trend = monthly.groupby("Month")["Score"].mean()
+    st.line_chart(trend)
