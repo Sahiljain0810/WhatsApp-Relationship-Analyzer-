@@ -1,0 +1,8 @@
+whatsapp_relationship_analyzer/
+│
+├── app.py
+├── sentiment.py
+├── emoji_utils.py
+├── chat_parser.py
+├── requirements.txt
+└── sample_chat.txt
